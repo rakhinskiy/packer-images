@@ -1,0 +1,48 @@
+{
+  "account": {
+    "description": "CI Runner",
+    "username": "ci-runner",
+    "password": "ci-runner"
+  },
+  "image": {
+    "name": "ci",
+    "cpu": 4,
+    "ram": 8,
+    "disk": 100,
+    "version": "sequoia"
+  },
+  "install": {
+    "brew": {
+      "casks": [
+        "git-credential-manager"
+      ],
+      "packages": [
+        "awscli",
+        "ca-certificates",
+        "curl",
+        "gh",
+        "gitlab-runner",
+        "jq",
+        "mc",
+        "unzip",
+        "wget",
+        "yq",
+        "zip"
+      ]
+    },
+    "xcode": [
+      {
+        "version": "15.4.0",
+        "select": false
+      },
+      {
+        "version": "16.2.0",
+        "select": true
+      },
+      {
+        "version": "16.4.0",
+        "select": false
+      }
+    ]
+  }
+}
