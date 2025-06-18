@@ -24,6 +24,11 @@ build {
     destination = "~/kc-passwd.py"
   }
 
+  provisioner "file" {
+    source      = "runtime/vulkansdk-macos-${var.install.vulkan-sdk}.zip"
+    destination = "~/vulkansdk-macos-${var.install.vulkan-sdk}.zip"
+  }
+
   dynamic "provisioner" {
     for_each = var.install.xcode
     labels = ["file"]

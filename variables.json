@@ -14,35 +14,42 @@
   "install": {
     "brew": {
       "casks": [
-        "git-credential-manager"
+        "git-credential-manager",
+        "iterm2",
+        "tuist"
       ],
       "packages": [
         "awscli",
         "ca-certificates",
+        "cmake",
+        "cocoapods",
         "curl",
+        "fastlane",
         "gh",
         "gitlab-runner",
+        "glfw",
+        "jfrog-cli",
         "jq",
         "mc",
+        "ninja",
+        "python@3.11",
+        "swiftly",
         "unzip",
         "wget",
         "yq",
         "zip"
       ]
     },
+    "swift": "6.1.2",
     "xcode": [
-      {
-        "version": "15.4.0",
-        "select": false
-      },
-      {
-        "version": "16.2.0",
-        "select": true
-      },
-      {
-        "version": "16.4.0",
-        "select": false
-      }
-    ]
+      { "version": "16.2.0", "select": true }
+    ],
+    "xcode-platforms": [
+      { "platform": "iOS", "version": "15.5" },
+      { "platform": "iOS", "version": "16.4" },
+      { "platform": "iOS", "version": "17.5" },
+      { "platform": "iOS", "version": "18.4" }
+    ],
+    "vulkan-sdk": "1.4.313.1"
   }
 }

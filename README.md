@@ -10,7 +10,10 @@ export XCODES_PASSWORD="..."
 xcodes download '16.2.0' --directory "$(pwd)/runtime/"
 
 nano variables.json
-make download # Run once or if xcode versions changed
+
+# Run once or if vulkan / xcode versions changed
+make download
+
 make build
 
 # If build failed

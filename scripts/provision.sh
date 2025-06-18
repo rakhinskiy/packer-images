@@ -2,7 +2,7 @@
 
 set -eu
 
-export "LANG=en_US.UTF-8"
+export LANG="en_US.UTF-8"
 export HOMEBREW_NO_AUTO_UPDATE=1
 export HOMEBREW_NO_INSTALL_CLEANUP=1
 
@@ -26,7 +26,7 @@ rm -rf ~/kc-passwd.py
 defaults -currentHost write com.apple.screensaver idleTime 0
 
 # Disable sleep
-sudo systemsetup -setsleep Off 2>/dev/null
+sudo systemsetup -setsleep Off 2> /dev/null
 
 # Disable screen lock
 sysadminctl -screenLock off -password ${account.password}
@@ -35,6 +35,9 @@ spctl --status | grep -q 'assessments disabled'
 
 # Disabling spotlight"
 sudo mdutil -a -i off
+
+# Swipe scroll direction
+defaults write -g com.apple.swipescrolldirection -bool true
 
 # Install Homebrew
 /bin/bash -c "$(curl -fsSL https://raw.githubusercontent.com/Homebrew/install/HEAD/install.sh)"
@@ -45,7 +48,7 @@ source ~/.zprofile
 /opt/homebrew/bin/brew update
 /opt/homebrew/bin/brew install git git-lfs zsh
 /opt/homebrew/bin/brew install xcodesorg/made/xcodes
-/opt/homebrew/bin/brew install ${join(" ", install.brew.packages)}
+/opt/homebrew/bin/brew install --formula ${join(" ", install.brew.packages)}
 /opt/homebrew/bin/brew install --cask ${join(" ", install.brew.casks)}
 
 # Enable Git LFS
@@ -53,8 +56,35 @@ git lfs install
 
 # Install Xcode
 %{ for x in install.xcode ~}
-xcodes install ${x.version} --experimental-unxip --path ~/Xcode-${x.version}.xip --empty-trash %{if x.select} --select %{endif}
+sudo xcodes install ${x.version} --experimental-unxip --path /Users/${account.username}/Xcode-${x.version}.xip --empty-trash %{if x.select} --select %{endif}
 %{ endfor ~}
+
+sudo xcodebuild -license accept
+xcodebuild -runFirstLaunch
+
+# Install Xcode Runtimes
+
+%{ for p in install.xcode-platforms ~}
+sudo xcodes runtimes install "${p.platform} ${p.version}"
+sleep 90
+%{ endfor ~}
+
+# Install Swift
+
+swiftly init -y
+swiftly install --use ${install.swift}
+
+# Install Vulkan SDK
+unzip vulkansdk-macos-${install.vulkan-sdk}.zip
+
+sudo /Users/${account.username}/vulkansdk-macOS-${install.vulkan-sdk}.app/Contents/MacOS/vulkansdk-macOS-${install.vulkan-sdk} \
+  --root /opt/vulkan-sdk \
+  --accept-licenses \
+  --default-answer \
+  --confirm-command install
+
+rm -rf /Users/${account.username}/vulkansdk-macos-${install.vulkan-sdk}.zip
+rm -rf /Users/${account.username}/vulkansdk-macOS-${install.vulkan-sdk}.app
 
 # Install Guest Agent
 /opt/homebrew/bin/brew install cirruslabs/cli/tart-guest-agent
